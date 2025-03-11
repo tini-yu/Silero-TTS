@@ -1,7 +1,5 @@
 audiofiles
 venv
 __pycache__
-.dockerignore
-Dockerfile
 gpu_check.py
 tts_test.ipynb

@@ -1,0 +1,6 @@
+./venv
+./audiofiles
+./gpu_check.py
+./tts_test.ipynb
+./__pycache__
+./.gitignore

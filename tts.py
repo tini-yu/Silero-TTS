@@ -25,11 +25,11 @@ put_accent=True
 put_yo=True
 
 class Text(BaseModel):
-    text: str
+    message: str
     
 def GenerateAudio(input_text: Text):
     input_json = input_text.model_dump()
-    input_text = input_json['text']
+    input_text = input_json['message']
 
     try:
         audio = model.apply_tts(text=input_text,
