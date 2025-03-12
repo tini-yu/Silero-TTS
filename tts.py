@@ -24,10 +24,10 @@ speaker = 'xenia'
 put_accent=True
 put_yo=True
 
-class Text(BaseModel):
+class Message(BaseModel):
     message: str
     
-def GenerateAudio(input_text: Text):
+def GenerateAudio(input_text: Message):
     input_json = input_text.model_dump()
     input_text = input_json['message']
 

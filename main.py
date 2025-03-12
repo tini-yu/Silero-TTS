@@ -21,8 +21,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-class Text(BaseModel):
-    text: str
+class Message(BaseModel):
+    message: str
 
 @app.get("/")
 def read_root():
@@ -30,7 +30,7 @@ def read_root():
 
 
 @app.post("/audio")
-async def generate_audio(input_text: Text):
+async def generate_audio(input_text: Message):
 
     #Если запрос находится в очереди больше 400 секунд - возвращает ошибку:
     start_time = time.time()
