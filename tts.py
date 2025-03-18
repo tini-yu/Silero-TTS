@@ -6,6 +6,7 @@ from pydantic import BaseModel
 import torch
 import os
 import scipy
+from pydub import AudioSegment
 
 device = torch.device('cpu')
 torch.set_num_threads(4)
@@ -51,15 +52,21 @@ def GenerateAudio(input_text: Message):
         # audio.write_to_fp(audio_buffer)
         audio_buffer.seek(0)
         audio_bytes = audio_buffer.read()
+        audio_wav_bytes = audio_bytes
+
+        # Конвертируйте WAV в MP3
+        audio_wav = AudioSegment.from_wav(io.BytesIO(audio_wav_bytes))
+        audio_mp3_bytes = io.BytesIO()
+        audio_wav.export(audio_mp3_bytes, format="mp3", bitrate="192k")
+
+        # Теперь audio_mp3_bytes содержит аудио в формате MP3
+        audio_mp3_bytes.seek(0)
+        audio_mp3_content = audio_mp3_bytes.read()
+
+        # Возвращаем ответ с MP3
+        return Response(content=audio_mp3_content)
     except:
         return {"message":"ОШИБКА: генерация аудио не удалась"}
-
-    # # Тело = текст + разделить + аудио
-    # separator = "---AUDIO---"
-    # body = input_text + separator
-    # body_bytes = body.encode('utf-8') + audio_bytes
-
-    return Response(content = audio_bytes)
 
     # output_directory = "C:/Users/Joe/Desktop/audio_guide/silero/audiofiles"
     # os.makedirs(output_directory, exist_ok=True)
