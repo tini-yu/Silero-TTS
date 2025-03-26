@@ -1,5 +1,4 @@
 import io
-import uuid
 from fastapi import Response
 import numpy as np
 from pydantic import BaseModel
@@ -7,6 +6,9 @@ import torch
 import os
 import scipy
 from pydub import AudioSegment
+import logging
+
+logger = logging.getLogger(__name__)
 
 device = torch.device('cpu')
 torch.set_num_threads(4)
@@ -64,8 +66,11 @@ def GenerateAudio(input_text: Message):
         audio_mp3_content = audio_mp3_bytes.read()
 
         # Возвращаем ответ с MP3
+        if len(audio_mp3_content) > 0:
+            logger.info("Audio was generated")
         return Response(content=audio_mp3_content)
     except:
+        logger.error("Couldn't generate audio")
         return {"message":"ОШИБКА: генерация аудио не удалась"}
 
     # output_directory = "C:/Users/Joe/Desktop/audio_guide/silero/audiofiles"

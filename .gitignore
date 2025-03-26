@@ -3,3 +3,4 @@ venv
 __pycache__
 gpu_check.py
 tts_test.ipynb
+tts.log

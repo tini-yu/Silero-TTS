@@ -4,3 +4,4 @@
 ./tts_test.ipynb
 ./__pycache__
 ./.gitignore
+./tts.log

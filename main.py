@@ -4,12 +4,17 @@ import time
 from fastapi import FastAPI
 import uvicorn
 from pydantic import BaseModel
+import logging
+
+logging.basicConfig(level=logging.INFO, filename=f"tts.log",filemode="a", format="%(name)s %(asctime)s | %(levelname)s | %(message)s")
+logger = logging.getLogger(__name__)
 
 import tts
 
 
 app = FastAPI()
 semaphore = asyncio.Semaphore(30)
+logger.info("APP STARTED")
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -39,6 +44,7 @@ async def generate_audio(input_text: Message):
         wait_time = time.time() - start_time
         if wait_time > 400:
             start_time = time.time()
+            logger.error("Time in queue over 400s")
             return {"message": "ОШИБКА: Время ожидания запроса в очереди превысило 400 секунд."}
         
         #Если запрос в течении 240 секунд не обработан, возвращает ошибку:
@@ -47,9 +53,11 @@ async def generate_audio(input_text: Message):
             response = await asyncio.wait_for(asyncio.to_thread(tts.GenerateAudio, input_text), timeout=240)
             
             end = time.time()
+            logger.info('It took {} seconds to finish execution.'.format(round(end-start)))
             print('It took {} seconds to finish execution.'.format(round(end-start)))
             return response
         except asyncio.TimeoutError:
+            logger.error("TTS generation took over 240s")
             return {"message":"ОШИБКА: Время ожидания запроса превысило 240 секунд."}
 
 
