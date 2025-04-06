@@ -6,7 +6,10 @@ import uvicorn
 from pydantic import BaseModel
 import logging
 
-logging.basicConfig(level=logging.INFO, filename=f"tts.log",filemode="a", format="%(name)s %(asctime)s | %(levelname)s | %(message)s")
+log_directory = "./silero_logs"
+os.makedirs(log_directory, exist_ok=True)
+log_file = os.path.join(log_directory, "llm.log")
+logging.basicConfig(level=logging.INFO, filename=log_file, filemode="a", format="%(name)s %(asctime)s | %(levelname)s | %(message)s")
 logger = logging.getLogger(__name__)
 
 import tts
