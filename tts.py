@@ -33,14 +33,20 @@ class Message(BaseModel):
 def GenerateAudio(input_text: Message):
     input_json = input_text.model_dump()
     input_text = input_json['message']
-
+    logger.info(f"Input: {input_text}")
+    if input_text.isascii():
+        return {"message":"ОШИБКА: Ascii, нет кириллицы"}
     try:
         audio = model.apply_tts(text=input_text,
                             speaker=speaker,
                             sample_rate=sample_rate,
                             put_accent=put_accent,
                             put_yo=put_yo)
-        
+        logger.info("model applied")
+    except:
+        logger.error("TTS model error")
+        return {"message":"ОШИБКА: Проблема с TTS моделью"}
+    try:
         audio_buffer = io.BytesIO()
         # Convert the tensor to a NumPy array
         if not isinstance(audio, np.ndarray):

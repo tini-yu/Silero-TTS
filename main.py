@@ -8,7 +8,7 @@ import logging
 
 log_directory = "./silero_logs"
 os.makedirs(log_directory, exist_ok=True)
-log_file = os.path.join(log_directory, "llm.log")
+log_file = os.path.join(log_directory, "tts.log")
 logging.basicConfig(level=logging.INFO, filename=log_file, filemode="a", format="%(name)s %(asctime)s | %(levelname)s | %(message)s")
 logger = logging.getLogger(__name__)
 
